@@ -86,10 +86,10 @@ class ViewController: UIViewController {
     
     @objc
     private func checkGuess(sender: UIButton) {
-        let sortedArray = emptyArr.sorted{$0 < $1}
+        let sortedArray = emptyArr.max()
         switch sender.tag {
         case 0:
-            if emptyArr[0] == sortedArray[2] {
+            if emptyArr[0] == sortedArray {
                 gameLabel.text = "Correct"
                 userScore += 1
                 scoreLabel.text = "Your score is \(userScore)"
@@ -101,7 +101,7 @@ class ViewController: UIViewController {
                 buttonStacks.isHidden = true
             }
         case 1:
-            if emptyArr[1] == sortedArray[2] {
+            if emptyArr[1] == sortedArray {
                 gameLabel.text = "Correct"
                 userScore += 1
                 scoreLabel.text = "Your score is \(userScore)"
@@ -113,7 +113,7 @@ class ViewController: UIViewController {
                 buttonStacks.isHidden = true
             }
         case 2:
-            if emptyArr[2] == sortedArray[2] {
+            if emptyArr[2] == sortedArray {
                 gameLabel.text = "Correct"
                 userScore += 1
                 scoreLabel.text = "Your score is \(userScore)"
