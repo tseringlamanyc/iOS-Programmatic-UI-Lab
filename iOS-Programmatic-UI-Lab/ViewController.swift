@@ -49,6 +49,7 @@ class ViewController: UIViewController {
         gameLabel.text = ""
         scoreLabel.text = "Current score"
         highScorelabel.text = "Your highschore is \(userHigh.max() ?? 0)"
+        print(emptyArr.max())
 }
     
     
@@ -72,6 +73,9 @@ class ViewController: UIViewController {
         redNum = CGFloat.random(in: 0...1)
         greenNum = CGFloat.random(in: 0...1)
         blueNum = CGFloat.random(in: 0...1)
+        print(redNum)
+        print(greenNum)
+        print(blueNum)
         let myColor = UIColor(red: redNum, green: greenNum, blue: blueNum, alpha: 1)
         emptyArr.append(redNum)
         emptyArr.append(greenNum)
@@ -82,9 +86,10 @@ class ViewController: UIViewController {
     
     @objc
     private func checkGuess(sender: UIButton) {
+        let sortedArray = emptyArr.sorted{$0 < $1}
         switch sender.tag {
         case 0:
-            if emptyArr[0] == emptyArr.max() ?? 0 {
+            if emptyArr[0] == sortedArray[2] {
                 gameLabel.text = "Correct"
                 userScore += 1
                 scoreLabel.text = "Your score is \(userScore)"
@@ -96,7 +101,7 @@ class ViewController: UIViewController {
                 buttonStacks.isHidden = true
             }
         case 1:
-            if emptyArr[1] == emptyArr.max() ?? 0 {
+            if emptyArr[1] == sortedArray[2] {
                 gameLabel.text = "Correct"
                 userScore += 1
                 scoreLabel.text = "Your score is \(userScore)"
@@ -108,7 +113,7 @@ class ViewController: UIViewController {
                 buttonStacks.isHidden = true
             }
         case 2:
-            if emptyArr[2] == emptyArr.max() ?? 0 {
+            if emptyArr[2] == sortedArray[2] {
                 gameLabel.text = "Correct"
                 userScore += 1
                 scoreLabel.text = "Your score is \(userScore)"
