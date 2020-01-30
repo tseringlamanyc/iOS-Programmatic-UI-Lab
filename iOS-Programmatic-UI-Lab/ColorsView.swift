@@ -22,7 +22,6 @@ class ColorsView: UIView {
     
     public lazy var showColor: UIView = {
         let colorView = UIView()
-        colorView.backgroundColor = generateColor()
         return colorView
     }()
     
@@ -44,17 +43,21 @@ class ColorsView: UIView {
         return label
     }()
     
+    public lazy var resetButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Reset", for: .normal)
+        button.backgroundColor = .systemGray
+        return button
+    }()
+    
     public lazy var colorButton: [UIButton] = {
         var buttons = [UIButton]()
         let redButton = UIButton()
         redButton.tag = 0
-        redButton.addTarget(self, action: #selector(checkGuess(sender:)), for: .touchUpInside)
         let greenButton = UIButton()
         greenButton.tag = 1
-        greenButton.addTarget(self, action: #selector(checkGuess(sender:)), for: .touchUpInside)
         let blueButton = UIButton()
         greenButton.tag = 2
-        blueButton.addTarget(self, action: #selector(checkGuess(sender:)), for: .touchUpInside)
         buttons.append(redButton)
         buttons.append(greenButton)
         buttons.append(blueButton)
@@ -85,22 +88,19 @@ class ColorsView: UIView {
         setUpLabel()
         setUpScoreLabel()
         highScoreLabel()
-        emptyArr = [CGFloat]()
-        showColor.backgroundColor = generateColor()
+        resetSetUp()
         gameLabel.text = "Hello, Press the button to play"
         scoreLabel.text = "Your score"
         highScore.text = "High score is \(userHigh.max() ?? 0)"
     }
     
-    private func generateColor() -> UIColor {
-        redNum = CGFloat.random(in: 0...1)
-        greenNum = CGFloat.random(in: 0...1)
-        blueNum = CGFloat.random(in: 0...1)
-        let myColor = UIColor(red: redNum, green: greenNum, blue: blueNum, alpha: 1)
-        emptyArr.append(redNum)
-        emptyArr.append(greenNum)
-        emptyArr.append(blueNum)
-        return myColor
+    private func resetSetUp() {
+        addSubview(resetButton)
+        resetButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            resetButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            resetButton.topAnchor.constraint(equalTo: highScore.bottomAnchor, constant: 40)
+        ])
     }
     
     private func setUpLabel() {
@@ -158,47 +158,5 @@ class ColorsView: UIView {
         ])
     }
     
-    @objc
-    private func checkGuess(sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            if emptyArr[0] == emptyArr.max() ?? 0 {
-                gameLabel.text = "Correct"
-                userScore += 1
-                scoreLabel.text = "Your score is \(userScore)"
-                emptyArr = [CGFloat]()
-                showColor.backgroundColor = generateColor()
-            } else {
-                userHigh.append(userScore)
-                gameLabel.text = "Incorrect"
-                buttonStacks.isHidden = true
-            }
-        case 1:
-            if emptyArr[1] == emptyArr.max() ?? 0 {
-                gameLabel.text = "Correct"
-                userScore += 1
-                scoreLabel.text = "Your score is \(userScore)"
-                emptyArr = [CGFloat]()
-                showColor.backgroundColor = generateColor()
-            } else {
-                userHigh.append(userScore)
-                gameLabel.text = "Incorrect"
-                buttonStacks.isHidden = true
-            }
-        case 2:
-            if emptyArr[2] == emptyArr.max() ?? 0 {
-                gameLabel.text = "Correct"
-                userScore += 1
-                scoreLabel.text = "Your score is \(userScore)"
-                emptyArr = [CGFloat]()
-                showColor.backgroundColor = generateColor()
-            } else {
-                userHigh.append(userScore)
-                gameLabel.text = "Incorrect"
-                buttonStacks.isHidden = true
-            }
-        default:
-            gameLabel.text = "N/A"
-        }
-    }
+    
 }
