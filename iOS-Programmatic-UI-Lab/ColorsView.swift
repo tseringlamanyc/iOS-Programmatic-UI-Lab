@@ -14,20 +14,31 @@ class ColorsView: UIView {
     var greenNum: CGFloat = 0.0
     var blueNum: CGFloat = 0.0
     
+    var emptyArr = [CGFloat]()
+    
     public lazy var showColor: UIView = {
        let colorView = UIView()
        colorView.backgroundColor = generateColor()
        return colorView
     }()
     
+    public lazy var gameLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        return label
+    }()
+    
     public lazy var colorButton: [UIButton] = {
        var buttons = [UIButton]()
         let redButton = UIButton()
         redButton.tag = 0
+        redButton.addTarget(self, action: #selector(checkGuess(sender:)), for: .touchUpInside)
         let greenButton = UIButton()
         greenButton.tag = 1
+        greenButton.addTarget(self, action: #selector(checkGuess(sender:)), for: .touchUpInside)
         let blueButton = UIButton()
-        greenButton.tag = 2 
+        greenButton.tag = 2
+        blueButton.addTarget(self, action: #selector(checkGuess(sender:)), for: .touchUpInside)
         buttons.append(redButton)
         buttons.append(greenButton)
         buttons.append(blueButton)
@@ -55,6 +66,7 @@ class ColorsView: UIView {
     private func commonInit() {
         setUpColorView()
         setUpStacks()
+        setUpLabel()
     }
     
     private func generateColor() -> UIColor {
@@ -62,10 +74,21 @@ class ColorsView: UIView {
         greenNum = CGFloat.random(in: 0...1)
         blueNum = CGFloat.random(in: 0...1)
         let myColor = UIColor(red: redNum, green: greenNum, blue: blueNum, alpha: 1)
+        emptyArr.append(redNum)
+        emptyArr.append(greenNum)
+        emptyArr.append(blueNum)
         return myColor
     }
     
-    
+    private func setUpLabel() {
+        addSubview(gameLabel)
+        gameLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            gameLabel.topAnchor.constraint(equalTo: buttonStacks.bottomAnchor, constant: 20),
+            gameLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            gameLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        ])
+    }
     
     private func setUpStacks() {
         addSubview(buttonStacks)
@@ -73,9 +96,9 @@ class ColorsView: UIView {
         buttonStacks.axis = .horizontal
         buttonStacks.distribution = .fillEqually
         buttonStacks.alignment = .fill
-        buttonStacks.spacing = 5
+        buttonStacks.spacing = 100
         NSLayoutConstraint.activate([
-            buttonStacks.topAnchor.constraint(equalTo: showColor.bottomAnchor, constant: 20),
+            buttonStacks.topAnchor.constraint(equalTo: showColor.bottomAnchor, constant: 40),
             buttonStacks.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
             buttonStacks.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
@@ -90,5 +113,31 @@ class ColorsView: UIView {
             showColor.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
             showColor.heightAnchor.constraint(equalToConstant: 200)
         ])
+    }
+    
+    @objc
+    private func checkGuess(sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            if emptyArr[0] == emptyArr.max() ?? 0 {
+                gameLabel.text = "Correct"
+            } else {
+                gameLabel.text = "Incorrect"
+            }
+        case 1:
+            if emptyArr[1] == emptyArr.max() ?? 0 {
+                gameLabel.text = "Correct"
+            } else {
+                gameLabel.text = "Incorrect"
+            }
+        case 2:
+            if emptyArr[2] == emptyArr.max() ?? 0 {
+                gameLabel.text = "Correct"
+            } else {
+                gameLabel.text = "Incorrect"
+            }
+        default:
+            gameLabel.text = "N/A"
+        }
     }
 }
