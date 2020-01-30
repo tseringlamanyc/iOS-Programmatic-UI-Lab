@@ -16,10 +16,14 @@ class ColorsView: UIView {
     
     var emptyArr = [CGFloat]()
     
+    var userScore = 0
+    
+    var userHigh = [Int]()
+    
     public lazy var showColor: UIView = {
-       let colorView = UIView()
-       colorView.backgroundColor = generateColor()
-       return colorView
+        let colorView = UIView()
+        colorView.backgroundColor = generateColor()
+        return colorView
     }()
     
     public lazy var gameLabel: UILabel = {
@@ -28,8 +32,20 @@ class ColorsView: UIView {
         return label
     }()
     
+    public lazy var scoreLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        return label
+    }()
+    
+    public lazy var highScore: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        return label
+    }()
+    
     public lazy var colorButton: [UIButton] = {
-       var buttons = [UIButton]()
+        var buttons = [UIButton]()
         let redButton = UIButton()
         redButton.tag = 0
         redButton.addTarget(self, action: #selector(checkGuess(sender:)), for: .touchUpInside)
@@ -67,6 +83,13 @@ class ColorsView: UIView {
         setUpColorView()
         setUpStacks()
         setUpLabel()
+        setUpScoreLabel()
+        highScoreLabel()
+        emptyArr = [CGFloat]()
+        showColor.backgroundColor = generateColor()
+        gameLabel.text = "Hello, Press the button to play"
+        scoreLabel.text = "Your score"
+        highScore.text = "High score is \(userHigh.max() ?? 0)"
     }
     
     private func generateColor() -> UIColor {
@@ -87,6 +110,26 @@ class ColorsView: UIView {
             gameLabel.topAnchor.constraint(equalTo: buttonStacks.bottomAnchor, constant: 20),
             gameLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
             gameLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        ])
+    }
+    
+    private func highScoreLabel() {
+        addSubview(highScore)
+        highScore.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            highScore.topAnchor.constraint(equalTo: scoreLabel.bottomAnchor, constant: 20),
+            highScore.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            highScore.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        ])
+    }
+    
+    private func setUpScoreLabel() {
+        addSubview(scoreLabel)
+        scoreLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            scoreLabel.topAnchor.constraint(equalTo: gameLabel.bottomAnchor, constant: 20),
+            scoreLabel.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            scoreLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20)
         ])
     }
     
@@ -121,20 +164,38 @@ class ColorsView: UIView {
         case 0:
             if emptyArr[0] == emptyArr.max() ?? 0 {
                 gameLabel.text = "Correct"
+                userScore += 1
+                scoreLabel.text = "Your score is \(userScore)"
+                emptyArr = [CGFloat]()
+                showColor.backgroundColor = generateColor()
             } else {
+                userHigh.append(userScore)
                 gameLabel.text = "Incorrect"
+                buttonStacks.isHidden = true
             }
         case 1:
             if emptyArr[1] == emptyArr.max() ?? 0 {
                 gameLabel.text = "Correct"
+                userScore += 1
+                scoreLabel.text = "Your score is \(userScore)"
+                emptyArr = [CGFloat]()
+                showColor.backgroundColor = generateColor()
             } else {
+                userHigh.append(userScore)
                 gameLabel.text = "Incorrect"
+                buttonStacks.isHidden = true
             }
         case 2:
             if emptyArr[2] == emptyArr.max() ?? 0 {
                 gameLabel.text = "Correct"
+                userScore += 1
+                scoreLabel.text = "Your score is \(userScore)"
+                emptyArr = [CGFloat]()
+                showColor.backgroundColor = generateColor()
             } else {
+                userHigh.append(userScore)
                 gameLabel.text = "Incorrect"
+                buttonStacks.isHidden = true
             }
         default:
             gameLabel.text = "N/A"
