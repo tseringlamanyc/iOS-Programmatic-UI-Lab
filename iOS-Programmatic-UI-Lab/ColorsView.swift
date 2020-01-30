@@ -16,8 +16,30 @@ class ColorsView: UIView {
     
     public lazy var showColor: UIView = {
        let colorView = UIView()
-        colorView.backgroundColor = generateColor()
+       colorView.backgroundColor = generateColor()
        return colorView
+    }()
+    
+    public lazy var colorButton: [UIButton] = {
+       var buttons = [UIButton]()
+        let redButton = UIButton()
+        redButton.tag = 0
+        let greenButton = UIButton()
+        greenButton.tag = 1
+        let blueButton = UIButton()
+        greenButton.tag = 2 
+        buttons.append(redButton)
+        buttons.append(greenButton)
+        buttons.append(blueButton)
+        return buttons
+    }()
+    
+    public lazy var buttonStacks: UIStackView = {
+        let stackViews = UIStackView(arrangedSubviews: colorButton)
+        stackViews.arrangedSubviews[0].backgroundColor = .systemRed
+        stackViews.arrangedSubviews[1].backgroundColor = .systemGreen
+        stackViews.arrangedSubviews[2].backgroundColor = .systemBlue
+        return stackViews
     }()
     
     override init(frame: CGRect) {
@@ -32,6 +54,7 @@ class ColorsView: UIView {
     
     private func commonInit() {
         setUpColorView()
+        setUpStacks()
     }
     
     private func generateColor() -> UIColor {
@@ -40,6 +63,22 @@ class ColorsView: UIView {
         blueNum = CGFloat.random(in: 0...1)
         let myColor = UIColor(red: redNum, green: greenNum, blue: blueNum, alpha: 1)
         return myColor
+    }
+    
+    
+    
+    private func setUpStacks() {
+        addSubview(buttonStacks)
+        buttonStacks.translatesAutoresizingMaskIntoConstraints = false
+        buttonStacks.axis = .horizontal
+        buttonStacks.distribution = .fillEqually
+        buttonStacks.alignment = .fill
+        buttonStacks.spacing = 5
+        NSLayoutConstraint.activate([
+            buttonStacks.topAnchor.constraint(equalTo: showColor.bottomAnchor, constant: 20),
+            buttonStacks.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            buttonStacks.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20)
+        ])
     }
     
     private func setUpColorView() {
